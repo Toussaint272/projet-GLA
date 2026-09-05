@@ -1,16 +1,27 @@
 pipeline {
     agent any
 
-    // Supprimez le bloc tools si Node.js est déjà configuré dans le PATH Windows
     tools {
         nodejs 'node18'
     }
 
     stages {
+        stage('Analyse de Qualite & Lint') {
+            steps {
+                echo '=== Verification de la qualite du code ==='
+                dir('backend') {
+                    bat 'npm run lint --if-present'
+                }
+                dir('frontend') {
+                    bat 'npm run lint --if-present'
+                }
+            }
+        }
+
         stage('Backend - Install & Test') {
             steps {
                 echo '=== Traitement du Backend ==='
-                dir('backend') { // Adaptez le nom du dossier si nécessaire
+                dir('backend') {
                     bat 'npm install'
                     bat 'npm test --if-present'
                 }
@@ -20,20 +31,35 @@ pipeline {
         stage('Frontend - Install & Build') {
             steps {
                 echo '=== Traitement du Frontend ==='
-                dir('frontend') { // Adaptez le nom du dossier si nécessaire
+                dir('frontend') {
                     bat 'npm install'
                     bat 'npm run build'
                 }
+            }
+        }
+
+        stage('Archivage des Artefacts') {
+            steps {
+                echo '=== Sauvegarde du dossier dist Frontend ==='
+                archiveArtifacts artifacts: 'frontend/dist/**', allowEmptyArchive: false
+            }
+        }
+
+        stage('Deploiement Automatique (PM2)') {
+            steps {
+                echo '=== Redemarrage de l application via PM2 ==='
+                bat 'pm2 startOrReload ecosystem.config.js'
+                bat 'pm2 save'
             }
         }
     }
 
     post {
         success {
-            echo 'Build et tests terminés avec succès !'
+            echo 'Build, tests, archivage et deploiement PM2 termines avec succes !'
         }
         failure {
-            echo 'Échec de la compilation ou des tests.'
+            echo 'Echec de la compilation, des tests ou du deploiement.'
         }
     }
 }
