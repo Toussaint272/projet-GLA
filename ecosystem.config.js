@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'backend-api',
-      script: 'server.js', // Changez par 'server.js' ou 'app.js' selon le point d'entrée de votre backend
+      script: './server.js',
       cwd: './backend',
       env: {
         NODE_ENV: 'production',
@@ -11,8 +11,8 @@ module.exports = {
     },
     {
       name: 'frontend-app',
-      script: 'npx',
-      args: 'serve -s dist -l 3000',
+      script: 'cmd.exe',
+      args: '/c serve -s dist -l 3000',
       cwd: './frontend',
       env: {
         NODE_ENV: 'production'
