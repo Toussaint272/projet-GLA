@@ -46,7 +46,7 @@ export default function Dashboard() {
       <section className="panel">
         <h2>Formations par catégorie</h2>
         {stats.par_categorie.length === 0 ? (
-          <p className="muted">Aucune formation enregistrée.</p>
+          <p className="muted">Aucune formation enregistrées.</p>
         ) : (
           <div className="bar-list">
             {stats.par_categorie.map((c) => {
