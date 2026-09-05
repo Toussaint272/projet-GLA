@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Backend - Install & Test') {
             steps {
-                dir('centre-formation/backend') {
+                dir('backend') {
                     bat 'npm install'
                     bat 'npm test --if-present'
                 }
@@ -17,7 +17,7 @@ pipeline {
 
         stage('Frontend - Install & Build') {
             steps {
-                dir('centre-formation/frontend') {
+                dir('frontend') {
                     bat 'npm install'
                     bat 'npm run build'
                 }
