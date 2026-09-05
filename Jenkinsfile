@@ -6,12 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git credentialsId: 'github-credentials', url: 'https://github.com/Toussaint272/projet-GLA.git'
-            }
-        }
-
         stage('Backend - Install & Test') {
             steps {
                 dir('centre-formation/backend') {
